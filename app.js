@@ -67,9 +67,9 @@ function extractQuestionsFromBody(htmlString) {
     var html = cheerio.load(htmlString);
     /*
       The css class of <span> containing google form question has changed from
-      "freebirdFormviewerViewItemsItemItemTitle" to "freebirdAnalyticsViewQuestionTitle"
+      "freebirdAnalyticsViewQuestionTitle" to "freebirdFormviewerComponentsQuestionBaseTitle"
     */
-    var questionSelectors = html(".freebirdAnalyticsViewQuestionTitle");
+    var questionSelectors = html(".freebirdFormviewerComponentsQuestionBaseTitle");
     if(!questionSelectors.length)
     {
         return false;
