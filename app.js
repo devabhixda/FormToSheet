@@ -41,9 +41,9 @@ function scrapeGoogleFormForQuestions(form_id) {
     const promise = q.defer();
     /*
       GOOGLE FORMS' LINKS NOW HAVE FOLLOWING URL STRUCTURE:
-      https://docs.google.com/forms/d/e/<form_id>/viewanalytics
+      https://docs.google.com/forms/d/e/<form_id>/viewform
     */
-    request("https://docs.google.com/forms/d/e/" + form_id + "/viewanalytics", (error, response, body) => {
+    request("https://docs.google.com/forms/d/e/" + form_id + "/viewform", (error, response, body) => {
         if (error) {
             promise.reject("Something went wrong");
         }
