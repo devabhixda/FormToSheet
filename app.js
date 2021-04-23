@@ -14,6 +14,9 @@ const request = require('request');
 const express = require('express');
 const q = require('q');
 const cheerio = require('cheerio');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const creds = require('./config/carbide-server-280316-c7750ec72a4d.json');
+const doc = new GoogleSpreadsheet('1xdQu-KEOFdqIz2HGhuzghYUyQan-qFLNCEo2i4nQVew');
 
 const app = express();
 const http = require('http').Server(app);
@@ -37,7 +40,8 @@ app.get('/scrape/:form_id', (request, response) => {
     })
 })
 
-function scrapeGoogleFormForQuestions(form_id) {
+async function scrapeGoogleFormForQuestions(form_id) {
+    await doc.useServiceAccountAuth(creds);
     const promise = q.defer();
     /*
       GOOGLE FORMS' LINKS NOW HAVE FOLLOWING URL STRUCTURE:
@@ -80,9 +84,11 @@ function extractQuestionsFromBody(htmlString) {
     }
 }
 
-function extractQuestionsFromQuestionSelectors(questionSelectors) {
+async function extractQuestionsFromQuestionSelectors(questionSelectors) {
     var questions = [];
-    questionSelectors.each(function(index, question) {
+    const sheet = await doc.addSheet({ headerValues: ['Question'] });
+    questionSelectors.each(async function(index, question) {
+        await sheet.addRow({Question : question.children[0].data});
         questions.push(question.children[0].data);
     })
     return questions;
