@@ -1,15 +1,3 @@
-/*
-  A simple script to scrape all the questions from a Google Form.
-  Created:
-    By -> https://github.com/khetrapalaksh4y
-    On -> 22 April, 2017
-
-  Updated:
-    By -> https://github.com/iamtalhaasghar
-    On -> 5 Jan 2020
-*/
-
-
 const request = require('request');
 const express = require('express');
 const q = require('q');
@@ -50,20 +38,15 @@ async function scrapeGoogleFormForQuestions(form_id) {
     request("https://docs.google.com/forms/d/e/" + form_id + "/viewform", (error, response, body) => {
         if (error) {
             promise.reject("Something went wrong");
-        }
-        else {
+        } else {
             var questions = extractQuestionsFromBody(body);
-            if(questions)
-            {
+            if(questions) {
                 promise.resolve(questions);
-            }
-            else
-            {
+            } else {
                 promise.reject("Ah! I couldn't find the questions. Please make sure the link you shared is valid and you can access atleast one question on it.");
             }
         }
     })
-
     return promise.promise;
 }
 
@@ -74,12 +57,9 @@ function extractQuestionsFromBody(htmlString) {
       "freebirdAnalyticsViewQuestionTitle" to "freebirdFormviewerComponentsQuestionBaseTitle"
     */
     var questionSelectors = html(".freebirdFormviewerComponentsQuestionBaseTitle");
-    if(!questionSelectors.length)
-    {
+    if(!questionSelectors.length) {
         return false;
-    }
-    else
-    {
+    } else {
         return extractQuestionsFromQuestionSelectors(questionSelectors);
     }
 }
